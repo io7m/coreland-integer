@@ -2,8 +2,8 @@
 
 default: all
 
-all: local t_fmt_spec t_scan_fspe1 t_scan_fspe2 t_scan_spec t_uint1 \
-	
+all: local t_fmt_spec t_int t_scan_fspe1 t_scan_fspe2 t_scan_spec \
+	t_uint1 
 
 cc-compile: conf-cc conf-cctype conf-cflags flags-math 
 cc-link: conf-ld libs-math 
@@ -16,6 +16,13 @@ t_fmt_spec:\
 t_fmt_spec.o:\
 	cc-compile t_fmt_spec.c ../fmt_spec.h t_assert.h 
 	./cc-compile t_fmt_spec.c
+t_int:\
+	cc-link t_int.ld t_int.o ../int16.a ../int32.a ../int64.a \
+	t_assert.o 
+	./cc-link t_int t_int.o ../int16.a ../int32.a ../int64.a t_assert.o 
+t_int.o:\
+	cc-compile t_int.c ../int16.h ../int32.h ../int64.h t_assert.h 
+	./cc-compile t_int.c
 t_scan_fspe1:\
 	cc-link t_scan_fspe1.ld t_scan_fspe1.o ../scan_fspec.a t_assert.o 
 	./cc-link t_scan_fspe1 t_scan_fspe1.o ../scan_fspec.a t_assert.o 
@@ -45,7 +52,7 @@ t_uint1.o:\
 clean-all: tests_clean local_clean obj_clean 
 clean: obj_clean
 obj_clean: 
-	rm -f t_assert.o t_fmt_spec t_fmt_spec.o t_scan_fspe1 \
+	rm -f t_assert.o t_fmt_spec t_fmt_spec.o t_int t_int.o t_scan_fspe1 \
 	t_scan_fspe1.o t_scan_fspe2 t_scan_fspe2.o t_scan_spec t_scan_spec.o \
 	t_uint1 t_uint1.o 
 
