@@ -1,0 +1,54 @@
+#!/bin/sh
+
+#
+# testing engine $Revision: 1.2 $
+#
+
+runtests()
+{
+  i=0
+  f=0
+  lf=0
+  p=0
+  v=$1
+  td=.
+
+  echo "running tests..."
+  echo "-----------------------"
+  for t in `cat ${td}/testlist`
+  do
+    ${td}/$t 1>/dev/null 2>/dev/null
+    case $? in
+      0) p=`expr ${p} + 1`  1>&2; 
+         if [ $v -eq 1 ] 
+         then 
+           echo "$t passed" 
+         fi;;
+      1) lf=`expr ${lf} + 1`  1>&2; echo "$t failed";;
+      2) f=`expr ${f} + 1`   1>&2;  echo "$t failed";;
+      *) f=`expr ${f} + 1`   1>&2;  echo "$t failed";;
+    esac
+    i=`expr ${i} + 1`
+  done
+
+  echo "-----------------------"
+  echo 'tests:                 ' ${i}
+  echo 'passed:                ' ${p}
+  echo 'library failures:      ' ${lf}
+  echo 'undertermined failures:' ${f}
+  return 0
+}
+
+verbose=0
+
+args=`getopt v $*`
+for a
+do
+  case "$a"
+  in
+    -v) verbose=1; shift;;
+    --) shift; break;;
+  esac
+done
+
+runtests ${verbose}

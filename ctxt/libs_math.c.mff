@@ -1,0 +1,3 @@
+ctxt/libs_math.c: mk-ctxt libs-math
+	rm -f ctxt/libs_math.c
+	./mk-ctxt ctxt_libs_math < libs-math > ctxt/libs_math.c

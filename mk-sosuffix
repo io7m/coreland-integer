@@ -1,0 +1,19 @@
+#!/bin/sh
+
+SYS_TYPE=`head -n 1 conf-systype`
+if [ $? -ne 0 ]
+then
+  echo "fatal: could not read conf-systype" 1>&2
+  exit 1
+fi
+
+case "${SYS_TYPE}" in
+  darwin)
+    exec echo 'dylib';;
+  hp-ux)
+    exec echo 'sl';;
+  cygwin*)
+    exec echo 'dll';;
+  *)
+    exec echo 'so';;
+esac

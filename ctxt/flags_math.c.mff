@@ -1,0 +1,3 @@
+ctxt/flags_math.c: mk-ctxt flags-math
+	rm -f ctxt/flags_math.c
+	./mk-ctxt ctxt_flags_math < flags-math > ctxt/flags_math.c

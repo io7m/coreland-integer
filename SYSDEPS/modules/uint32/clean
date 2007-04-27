@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SYSDEP_CLEAN=1
+. ../../sysdep-main
+if [ $? -ne 0 ]
+then
+  exit 111
+fi
+
+sd_tmp="sysdeps.out"
+f1_tmp="_uint32.h"
+echo "SYSDEPS uint32 clean ${f1_tmp}"
+
+sd_out="${SYSDEP_OUTDIR}/${sd_tmp}"
+f1_out="${SYSDEP_OUTDIR}/${f1_tmp}"
+
+rm -f ${f1_tmp} ${sd_tmp} \
+      ${f1_out} ${sd_out}

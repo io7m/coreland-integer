@@ -1,0 +1,6 @@
+#!/bin/sh
+
+fout="$1"
+
+( cat VERSION
+  date +"%H:%M:%S %d/%m/%Y %Z" ) >> ${fout}

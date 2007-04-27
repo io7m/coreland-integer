@@ -1,0 +1,46 @@
+#!/bin/sh
+
+dlist=""
+sdlist=""
+sdclist=""
+
+for f in `find modules -type d -maxdepth 1`
+do
+  g=`echo ${f} | awk -F/ '{print $2}'`
+  if [ "${g}" = "CVS" ]
+  then 
+    continue
+  fi
+  if [ "${g}" = ".svn" ]
+  then 
+    continue
+  fi
+  if [ ${#g} -eq 0 ]
+  then
+    continue
+  fi
+  dlist="${dlist} ${g}"
+  sdlist="${sdlist} sd_${g}"
+  sdclist="${sdclist} sd_${g}_clean"
+done
+
+echo "default: sysdeps"
+echo "clean: sysdeps_clean"
+echo
+echo "sysdeps: ${sdlist}"
+echo "sysdeps_clean: ${sdclist}"
+echo
+
+for f in ${dlist}
+do
+  echo "sd_${f}:"
+  printf "\t@(cd modules/${f} && ./run)\n"
+  echo "sd_${f}_clean:"
+  printf "\t@(cd modules/${f} && ./clean)\n"
+  echo
+done
+
+echo "regen:"
+printf "\t./gen-makefile > Makefile.tmp\n"
+printf "\tmv Makefile.tmp Makefile"
+echo

@@ -1,0 +1,13 @@
+byteorder
+
+This module creates the appropriate typedef for the byteorder
+header file.
+
+It does a simple pointer check to see if memory is in little
+endian or big endian format. There are no plans to support
+middle endian byte ordering. The module writes a header file.
+
+This module is terminal, if the system isn't running in little
+endian or big endian mode, the build is halted.
+
+A 'byteorder:' line is written in sysdeps.out.

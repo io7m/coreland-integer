@@ -1,0 +1,9 @@
+#!/bin/sh
+
+for mod in `ls modules`
+do
+  for file in `cat modules/$mod/CREATES`
+  do
+    echo $file
+  done
+done
