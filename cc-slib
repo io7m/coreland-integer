@@ -49,6 +49,7 @@ case "${SYS_TYPE}" in
   DG_UX) ;;
   UNIXWARE) ;;
   CRAY_UNICOS) ;;
+  VMS) ;;
   *)
     ${RANLIB} "$main.a"
     ;;

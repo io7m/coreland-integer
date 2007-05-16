@@ -119,7 +119,7 @@ int main()
 #if defined(sco) || defined(_UNIXWARE7)
   var = "UNIXWARE";
 #endif
-#if defined(____VMS_VER)
+#if defined(__VMS_VER) || defined(VMS) || defined(__VMS)
   var = "VMS";
 #endif
 #if defined(__MVS__) || defined(__HOS_MVS__) || defined(__TOS_MVS__)
