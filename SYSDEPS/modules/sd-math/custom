@@ -1,0 +1,86 @@
+#!/bin/sh
+
+libs_out="$1"
+flag_out="$2"
+head_out="$3"
+sysd_out="$4"
+
+M_FLAGS=""
+M_LIBS=""
+M_HAVE=0
+
+cleanup()
+{
+  rm -f trymath1 trymath1.o
+}
+
+try_math()
+{
+  ${SYSDEP_CC} ${SYSDEP_CFLAGS} ${M_FLAGS} \
+    -c -o trymath1.o trymath1.c 1>/dev/null 2>&1
+  ${SYSDEP_LD} \
+    -o trymath1 trymath1.o ${SYSDEP_LDFLAGS} ${M_LIBS} 1>/dev/null 2>&1
+
+  if [ $? -eq 0 ]
+  then
+    echo "${M_FLAGS}" >> "${flag_out}"
+    echo "${M_LIBS}" >> "${libs_out}"
+    echo "math-flags: ${M_FLAGS}" >> "${sysd_out}"
+    echo "math-libs: ${M_LIBS}" >> "${sysd_out}"
+    M_HAVE=1
+    cleanup
+    return 0
+  fi
+  cleanup
+  return 1
+}
+
+try_math_funcs()
+{
+  echo "#ifndef _SD_MATH_H" >> "${head_out}"
+  echo "#define _SD_MATH_H" >> "${head_out}"
+  echo >> "${head_out}"
+
+  for fn in `ls math_funcs`
+  do
+    FUNC=`echo ${fn} | tr [a-z] [A-Z]`
+    ${SYSDEP_CC} ${SYSDEP_CFLAGS} ${M_FLAGS} \
+      -c -o tmp/${fn}.o math_funcs/${fn}/${fn}.c 1>/dev/null 2>&1
+    ${SYSDEP_LD} \
+      -o tmp/${fn} tmp/${fn}.o ${SYSDEP_LDFLAGS} ${M_LIBS} 1>/dev/null 2>&1
+
+    if [ $? -eq 0 ]
+    then
+      echo "#define HAVE_MATH_${FUNC}" >> "${head_out}"
+      funcs="${fn} ${funcs}"
+    fi
+    rm -f tmp/${fn} tmp/${fn}.o
+  done
+
+  echo >> "${head_out}"
+  echo "#endif" >> "${head_out}"
+  echo "math-funcs: ${funcs}" >> "${sysd_out}"
+  cleanup
+  exit 0
+}
+
+#
+# try combinations of flags and libs to get math libs
+# order is, unfortunately, significant.
+#
+
+M_FLAGS=""
+M_LIBS="-lm"
+try_math
+if [ $? -eq 0 ]; then try_math_funcs; fi
+
+M_FLAGS=""
+M_LIBS=""
+try_math
+if [ $? -eq 0 ]; then try_math_funcs; fi
+
+#
+# fallback
+#
+
+try_math_funcs

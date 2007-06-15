@@ -6,13 +6,58 @@ then
   exit 1
 fi
 
-LD=`head -n 1 conf-ld`
-if [ $? -ne 0 ]
+#
+# Assume source is being cross linked if there is a cross-linker
+# defined.
+#
+
+if [ -f conf-x-ld ]
 then
-  echo "fatal: could not read conf-ld" 1>&2
-  exit 1
+  LD=`head -n 1 conf-x-ld`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-ld" 1>&2
+    exit 1
+  fi
+  SYSTYPE=`head -n 1 conf-x-systype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-systype" 1>&2
+    exit 1
+  fi  
+  LDTYPE=`head -n 1 conf-x-ldtype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-ldtype" 1>&2
+    exit 1
+  fi
+  LDFLAGS="${LDFLAGS} `head -n 1 conf-x-ldflags 2>/dev/null`"
+else
+  LD=`head -n 1 conf-ld`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-ld" 1>&2
+    exit 1
+  fi
+  SYSTYPE=`head -n 1 conf-systype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-systype" 1>&2
+    exit 1
+  fi  
+  LDTYPE=`head -n 1 conf-ldtype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-ldtype" 1>&2
+    exit 1
+  fi
 fi
+
 LDFLAGS="${LDFLAGS} `head -n 1 conf-ldflags 2>/dev/null`"
+
+#
+# Read global flag file list, if present.
+#
 
 if [ -f "conf-ldfflist" ]
 then
@@ -26,7 +71,10 @@ fi
 out="$1"
 shift
 
-# read in optional flag file
+#
+# Read local flag file list, if present.
+#
+
 if [ -f "${out}.lff" ]
 then
   for f in `cat "${out}.lff"`

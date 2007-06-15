@@ -1,0 +1,77 @@
+#!/bin/sh
+
+cleanup()
+{
+  rm -f try_uint1 try_uint1.o \
+        try_uint2 try_uint2.o \
+        try_stdint try_stdint.o
+}
+
+fatal()
+{
+  ${SYSDEP_FATAL} "$1"
+  cleanup
+  exit 1
+}
+
+have_it()
+{
+  type="$1"
+  extra="$2"
+
+  cat >> "${temp_f}" <<EOF
+#ifndef _UINT32_H
+#define _UINT32_H
+
+$extra
+typedef $type uint32;
+
+#endif
+EOF
+  echo "uint32: ${type}" >> "${temp_sys}"
+  cleanup
+  exit 0
+}
+
+temp_f="$1"
+temp_sys="$2"
+
+${SYSDEP_CC} ${SYSDEP_CFLAGS} -c -o try_stdint.o try_stdint.c 1>/dev/null 2>&1
+${SYSDEP_LD} -o try_stdint try_stdint.o ${SYSDEP_LDFLAGS} 1>/dev/null 2>&1
+if [ $? -eq 0 ]
+then
+  have_it "uint32_t" "#include <stdint.h>"
+fi
+
+${SYSDEP_CC} ${SYSDEP_CFLAGS} -c -o try_uint1.o try_uint1.c 1>/dev/null 2>&1
+${SYSDEP_LD} -o try_uint1 try_uint1.o ${SYSDEP_LDFLAGS} 1>/dev/null 2>&1
+if [ $? -eq 0 ]
+then
+  type=`./try_uint1`
+  if [ $? -eq 0 ]
+  then
+    have_it "${type}"
+  else
+    ${SYSDEP_CC} ${SYSDEP_CFLAGS} -c -o try_uint2.o try_uint2.c 1>/dev/null 2>&1
+    ${SYSDEP_LD} -o try_uint2 try_uint2.o ${SYSDEP_LDFLAGS} 1>/dev/null 2>&1
+    if [ $? -eq 0 ]
+    then
+      type=`./try_uint2`
+      if [ $? -eq 0 ]
+      then
+        have_it "${type}"
+      fi
+    fi
+  fi
+fi
+
+conf=`${SYSDEP_LINE} 1 < CONFIG`
+${SYSDEP_INFO} "falling back to ${conf}"
+type=`${SYSDEP_FILE} get "${conf}" ""`
+if [ ! -z ${type} ]
+then
+  fatal "could not get unsigned 32 bit integer type"
+fi
+
+cleanup
+exit 0

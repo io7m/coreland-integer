@@ -1,0 +1,67 @@
+#!/bin/sh
+
+cleanup()
+{
+  rm -f byteorder byteorder.o
+}
+
+fatal()
+{
+  ${SYSDEP_FATAL} "$1"
+  cleanup
+  exit 1
+}
+
+temph="$1"
+tempsys="$2"
+
+cat >> "${temph}" << EOF
+#ifndef _BYTEORDER_H
+#define _BYTEORDER_H
+
+#define E_BIG_ENDIAN 0
+#define E_LITTLE_ENDIAN 1
+
+EOF
+
+if [ ${SYSDEP_CROSS_COMPILE} -eq 0 ]
+then
+  ${SYSDEP_CC} ${SYSDEP_CFLAGS} -c -o byteorder.o byteorder.c
+  ${SYSDEP_LD} -o byteorder byteorder.o ${SYSDEP_LDFLAGS}
+  if [ $? -ne 0 ]; then fatal "error compiling byteorder"; fi
+  order=`./byteorder`
+fi
+
+if [ -z "${order}" ]
+then
+  conf=`${SYSDEP_LINE} 1 < CONFIG`
+  order=`${SYSDEP_FILE} get "${conf}" ""`
+  if [ -z "${order}" ]
+  then
+    if [ ${SYSDEP_CROSS_COMPILE} -eq 1 ]
+    then
+      fatal "cross compiling and unable to read ${conf}"
+    else
+      fatal "unable to determine byte order and unable to read ${conf}"
+    fi
+  fi
+fi
+
+case "${order}" in
+  little)
+    echo '#define E_ENDIANNESS E_LITTLE_ENDIAN' >> "${temph}"
+    echo 'byteorder: little' >> "${tempsys}"
+    ;;
+  big)
+    echo '#define E_ENDIANNESS E_BIG_ENDIAN' >> "${temph}"
+    echo 'byteorder: big' >> "${tempsys}"
+    ;;
+  *)
+    fatal "unknown byte ordering"
+    ;;
+esac
+
+echo '#endif' >> "${temph}"
+
+cleanup
+exit 0

@@ -6,15 +6,59 @@ then
   exit 1
 fi
 
-CC=`head -n 1 conf-cc`
-if [ $? -ne 0 ]
+#
+# Assume source is being cross compiled if there is a cross-compiler
+# defined.
+#
+
+if [ -f conf-x-cc ]
 then
-  echo "fatal: could not read conf-cc" 1>&2
-  exit 1
+  CC=`head -n 1 conf-x-cc`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-cc" 1>&2
+    exit 1
+  fi
+  SYSTYPE=`head -n 1 conf-x-systype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-systype" 1>&2
+    exit 1
+  fi
+  CCTYPE=`head -n 1 conf-x-cctype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-cctype" 1>&2
+    exit 1
+  fi
+  CFLAGS="${CFLAGS} `head -n 1 conf-x-cflags 2>/dev/null`"
+else
+  CC=`head -n 1 conf-cc`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-cc" 1>&2
+    exit 1
+  fi
+  SYSTYPE=`head -n 1 conf-systype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-systype" 1>&2
+    exit 1
+  fi
+  CCTYPE=`head -n 1 conf-cctype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-cctype" 1>&2
+    exit 1
+  fi
 fi
+
 CFLAGS="${CFLAGS} `head -n 1 conf-cflags 2>/dev/null`"
 
-# read in optional flag file
+#
+# Read global flag file list, if present.
+#
+
 if [ -f "conf-ccfflist" ]
 then
   for f in `cat "conf-ccfflist"`
@@ -24,11 +68,18 @@ then
   done
 fi
 
+#
+# Extract base name of given source file.
+#
+
 out=`echo "$1" | awk -F. '{print $1}'`
 src="$1"
 shift
 
-# read in optional flag file
+#
+# Read local flag file list, if present.
+#
+
 if [ -f "${out}.iff" ]
 then
   for f in `cat "${out}.iff"`

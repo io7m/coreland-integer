@@ -12,7 +12,24 @@ then
   exit 1
 fi
 
-( cat <<EOF
+#
+# If conf-x-cctype exists, compiler is attempting to cross compile and
+# the compiler cannot be assumed to output executables compatible with
+# this system.
+#
+
+if [ -f conf-x-cctype ]
+then
+  TYPE=`head -n 1 conf-x-cctype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-cctype" 1>&2
+    cleanup
+    exit 1
+  fi
+  echo "${TYPE}"
+else
+  ( cat <<EOF
 #include <stdio.h>
 const char *var = "UNKNOWN";
 int main()
@@ -163,26 +180,26 @@ int main()
 }
 EOF
 ) > _mk_cctype.c
-
-if [ $? -ne 0 ]
-then
-  echo "fatal: could not create _mk_cctype.c" 1>&2
-  cleanup
-  exit 1
-fi
-${SYS_CC} -o _mk_cctype _mk_cctype.c
-if [ $? -ne 0 ]
-then
-  echo "fatal: could not create _mk_cctype" 1>&2
-  cleanup
-  exit 1
-fi
-./_mk_cctype
-if [ $? -ne 0 ]
-then
-  echo "fatal: could not execute _mk_cctype" 1>&2
-  cleanup
-  exit 1
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not create _mk_cctype.c" 1>&2
+    cleanup
+    exit 1
+  fi
+  ${SYS_CC} -o _mk_cctype _mk_cctype.c
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not create _mk_cctype" 1>&2
+    cleanup
+    exit 1
+  fi
+  ./_mk_cctype
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not execute _mk_cctype" 1>&2
+    cleanup
+    exit 1
+  fi
 fi
 
 cleanup

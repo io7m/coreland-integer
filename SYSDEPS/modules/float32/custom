@@ -1,0 +1,64 @@
+#!/bin/sh
+
+cleanup()
+{
+  rm -f float32_make float32_make.o
+}
+
+fatal()
+{
+  echo "fatal: $1" 1>&2
+  cleanup
+  exit 1
+}
+
+have_it()
+{
+  type="$1"
+  cat >> ${temp32} << EOF
+#ifndef _FLOAT32_H
+#define _FLOAT32_H
+
+typedef ${type} float32;
+
+#endif
+EOF
+  echo "float32: ${type}" >> "${tempsys}"
+  cleanup
+  exit 0
+}
+
+temp32="$1"
+tempsys="$2"
+
+if [ ${SYSDEP_CROSS_COMPILE} -eq 0 ]
+then
+  ${SYSDEP_CC} ${SYSDEP_CFLAGS} -c -o float32_make.o float32_make.c
+  ${SYSDEP_LD} -o float32_make float32_make.o ${SYSDEP_LDFLAGS}
+  if [ $? -ne 0 ]; then fatal "error compiling float32_make"; fi
+  type=`./float32_make`
+  if [ $? -eq 0 ];
+  then
+    have_it "${type}"
+  fi
+fi
+
+if [ -z "${type}" ]
+then
+  conf=`${SYSDEP_LINE} 1 < CONFIG`
+  type=`${SYSDEP_FILE} get "${conf}" ""`
+  if [ -z "${type}" ]
+  then
+    if [ ${SYSDEP_CROSS_COMPILE} -eq 1 ]
+    then
+      fatal "cross compiling and unable to read ${conf}"
+    else
+      fatal "unable to find appropriate float32 type and unable to read ${conf}"
+    fi
+  else
+    have_it "${type}"
+  fi
+fi
+
+cleanup
+exit 0

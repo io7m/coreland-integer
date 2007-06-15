@@ -12,6 +12,16 @@ then
   exit 1
 fi
 
+if [ -f conf-x-systype ]
+then
+  SYS=`head -n 1 conf-x-systype`
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not read conf-x-systype" 1>&2
+    exit 1
+  fi
+  echo "${SYS}"
+else
 ( cat <<EOF
 #include <stdio.h>
 const char *var = "UNKNOWN";
@@ -130,26 +140,26 @@ int main()
 }
 EOF
 ) > _mk_systype.c
-
-if [ $? -ne 0 ]
-then
-  echo "fatal: could not create _mk_systype.c" 1>&2
-  cleanup
-  exit 1
-fi
-${SYS_CC} -o _mk_systype _mk_systype.c
-if [ $? -ne 0 ]
-then
-  echo "fatal: could not create _mk_systype" 1>&2
-  cleanup
-  exit 1
-fi
-./_mk_systype
-if [ $? -ne 0 ]
-then
-  echo "fatal: could not execute _mk_systype" 1>&2
-  cleanup
-  exit 1
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not create _mk_systype.c" 1>&2
+    cleanup
+    exit 1
+  fi
+  ${SYS_CC} -o _mk_systype _mk_systype.c
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not create _mk_systype" 1>&2
+    cleanup
+    exit 1
+  fi
+  ./_mk_systype
+  if [ $? -ne 0 ]
+  then
+    echo "fatal: could not execute _mk_systype" 1>&2
+    cleanup
+    exit 1
+  fi
 fi
 
 cleanup

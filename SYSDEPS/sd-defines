@@ -1,0 +1,12 @@
+#!/bin/sh
+
+for mod in `ls modules | sort`
+do
+  if [ -f modules/$mod/defines ]
+  then
+    for def in `cat modules/$mod/defines`
+    do
+      echo $def
+    done
+  fi
+done
