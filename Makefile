@@ -510,24 +510,23 @@ cc-compile uint64_unpack.c uint64.h
 clean-all: sysdeps_clean tests_clean obj_clean 
 clean: obj_clean
 obj_clean: 
-	rm -f conf-cctype conf-systype ctxt/bindir.c ctxt/bindir.o \
-	ctxt/ctxt.a ctxt/dlibdir.c ctxt/dlibdir.o ctxt/flags_math.c \
-	ctxt/flags_math.o ctxt/incdir.c ctxt/incdir.o ctxt/libs_math.c \
-	ctxt/libs_math.o ctxt/repos.c ctxt/repos.o ctxt/slibdir.c \
-	ctxt/slibdir.o ctxt/version.c ctxt/version.o float32.a \
-	float32_pack.o float32_upack.o float64.a float64_pack.o \
-	float64_upack.o fmt_spec.a fmt_u32.o fmt_u32b.o fmt_u32o.o \
-	fmt_u32x.o fmt_u64.o fmt_u64b.o fmt_u64o.o fmt_u64x.o inst-check \
-	inst-check.o inst-copy inst-copy.o inst-dir inst-dir.o inst-link \
-	inst-link.o install_core.o install_error.o installer installer.o \
-	instchk instchk.o insthier.o int16.a int16_pack.o int16_unpack.o \
-	int32.a int32_pack.o int32_unpack.o int64.a int64_pack.o \
-	int64_unpack.o integer-conf integer-conf.o scan_f32.o scan_f64.o \
-	scan_fspec.a scan_spec.a 
-	rm -f scan_u32.o scan_u32o.o scan_u32x.o scan_u64.o scan_u64o.o \
-	scan_u64x.o sysinfo sysinfo.o uint16.a uint16_pack.o uint16_unpack.o \
-	uint32.a uint32_pack.o uint32_unpack.o uint64.a uint64_pack.o \
-	uint64_unpack.o 
+	rm -f ctxt/bindir.c ctxt/bindir.o ctxt/ctxt.a ctxt/dlibdir.c \
+	ctxt/dlibdir.o ctxt/flags_math.c ctxt/flags_math.o ctxt/incdir.c \
+	ctxt/incdir.o ctxt/libs_math.c ctxt/libs_math.o ctxt/repos.c \
+	ctxt/repos.o ctxt/slibdir.c ctxt/slibdir.o ctxt/version.c \
+	ctxt/version.o float32.a float32_pack.o float32_upack.o float64.a \
+	float64_pack.o float64_upack.o fmt_spec.a fmt_u32.o fmt_u32b.o \
+	fmt_u32o.o fmt_u32x.o fmt_u64.o fmt_u64b.o fmt_u64o.o fmt_u64x.o \
+	inst-check inst-check.o inst-copy inst-copy.o inst-dir inst-dir.o \
+	inst-link inst-link.o install_core.o install_error.o installer \
+	installer.o instchk instchk.o insthier.o int16.a int16_pack.o \
+	int16_unpack.o int32.a int32_pack.o int32_unpack.o int64.a \
+	int64_pack.o int64_unpack.o integer-conf integer-conf.o mk-ctxt \
+	scan_f32.o scan_f64.o scan_fspec.a scan_spec.a scan_u32.o 
+	rm -f scan_u32o.o scan_u32x.o scan_u64.o scan_u64o.o scan_u64x.o \
+	sysinfo sysinfo.o uint16.a uint16_pack.o uint16_unpack.o uint32.a \
+	uint32_pack.o uint32_unpack.o uint64.a uint64_pack.o uint64_unpack.o \
+	
 
 deinstall: deinstaller inst-check inst-copy inst-dir inst-link
 	./deinstaller
