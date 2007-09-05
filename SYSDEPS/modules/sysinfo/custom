@@ -20,7 +20,7 @@ define SYS_ARCH "${SYSDEP_ARCH}"
 define SYS_CCTYPE "${SYSDEP_CCTYPE}"
 define SYS_CFLAGS \""${SYSDEP_CFLAGS}"\"
 define SYS_LDFLAGS \""${SYSDEP_LDFLAGS}"\"
-define SYS_CCVERSION "${SYSDEP_CCVERSION}"
+define SYS_CCVERSION \""${SYSDEP_CCVERSION}"\"
 
 major=`echo "${SYSDEP_CCVERSION}" | awk -F. '{print $1}'`
 minor=`echo "${SYSDEP_CCVERSION}" | awk -F. '{print $2}'`

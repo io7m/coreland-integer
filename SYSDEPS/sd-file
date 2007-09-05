@@ -28,6 +28,15 @@ file_exists_by_path()
   done
   return 0
 }
+file_show_by_path()
+{
+  targ_file="$1"
+  for dir in ${FILE_PATH_DIRS}
+  do
+    if [ -f "${dir}/${targ_file}" ]; then echo "${dir}/${targ_file}"; return 1; fi
+  done
+  return 0
+}
 
 if [ $# -lt 2 ]
 then
@@ -46,6 +55,10 @@ case "${command}" in
     ;;
   exists)
     file_exists_by_path "${file}"
+    exit $?
+    ;;
+  show)
+    file_show_by_path "${file}"
     exit $?
     ;;
   *)

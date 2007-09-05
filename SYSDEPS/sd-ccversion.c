@@ -24,6 +24,16 @@ static void dec_decode_tri(unsigned int ver)
 
 int main(void)
 {
+  /* XXX: hack to allow compilation on compilers with extreme error checking
+          (unused functions cause compilation failure) */
+
+  hex_decode_tri(1);
+  dec_decode_tri(1);
+  ver_major = 0;
+  ver_minor = 0;
+  ver_patch = 0;
+  ver = 0;
+
   /* Borland C++ */
 #if defined(__BORLANDC__)
   hex_decode_tri(__BORLANDC__);

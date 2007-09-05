@@ -17,8 +17,21 @@ export SYSDEP_CROSS_COMPILE
 
 if [ $SYSDEP_CROSS_COMPILE -eq 1 ]
 then
-  SYSDEP_CC=`${SYSDEP_FILE} get "conf-x-cc" "${SYSDEP_CC}"`
-  SYSDEP_LD=`${SYSDEP_FILE} get "conf-x-ld" "${SYSDEP_LD}"`
+  conf=`${SYSDEP_FILE} show "conf-x-cc"`
+  if [ $? -eq 0 ]
+  then
+    ${SYSDEP_ERROR} "could not read conf-x-cc"
+    exit 112;
+  fi
+  SYSDEP_CC=`${SYSDEP_LINE} 1 < ${conf}`
+
+  conf=`${SYSDEP_FILE} show "conf-x-ld"`
+  if [ $? -eq 0 ]
+  then
+    ${SYSDEP_ERROR} "could not read conf-x-ld"
+    exit 112;
+  fi
+  SYSDEP_LD=`${SYSDEP_LINE} 1 < ${conf}`
 
   if [ -z "${SYSDEP_CC}" ]
   then
@@ -31,14 +44,37 @@ then
     exit 112
   fi
 
-  SYSDEP_CFLAGS=`${SYSDEP_FILE} get "conf-x-cflags" "${SYSDEP_CFLAGS}"`
-  SYSDEP_LDFLAGS=`${SYSDEP_FILE} get "conf-x-ldflags" "${SYSDEP_LDFLAGS}"`
+  conf=`${SYSDEP_FILE} show "conf-x-cflags"`
+  if [ $? -eq 1 ]; then SYSDEP_CFLAGS=`${SYSDEP_LINE} 1 < ${conf}`; fi
+  conf=`${SYSDEP_FILE} show "conf-x-ldflags"`
+  if [ $? -eq 1 ]; then SYSDEP_LDFLAGS=`${SYSDEP_LINE} 1 < ${conf}`; fi
+
   export SYSDEP_CFLAGS
   export SYSDEP_LDFLAGS
 else
   SYSDEP_CC="cc"
-  SYSDEP_CC=`${SYSDEP_FILE} get "conf-cc" "${SYSDEP_CC}"`
-  SYSDEP_LD=`${SYSDEP_FILE} get "conf-ld" "${SYSDEP_LD}"`
+
+  conf=`${SYSDEP_FILE} show "conf-cc"`
+  if [ $? -eq 1 ]
+  then
+    SYSDEP_CC=`${SYSDEP_LINE} 1 < ${conf}`
+    if [ $? -ne 0 ]
+    then
+      ${SYSDEP_ERROR} "could not read conf-cc"
+      exit 112;
+    fi
+  fi
+
+  conf=`${SYSDEP_FILE} show "conf-ld"`
+  if [ $? -eq 1 ]
+  then
+    SYSDEP_LD=`${SYSDEP_LINE} 1 < ${conf}`
+    if [ $? -ne 0 ]
+    then
+      ${SYSDEP_ERROR} "could not read conf-ld"
+      exit 112;
+    fi
+  fi
 
   if [ -z ${SYSDEP_CC} ]
   then
@@ -50,6 +86,13 @@ else
     ${SYSDEP_ERROR} "linker is not defined"
     exit 112
   fi
+
+  conf=`${SYSDEP_FILE} show "conf-cflags"`
+  if [ $? -eq 1 ]; then SYSDEP_CFLAGS=`${SYSDEP_LINE} 1 < ${conf}`; fi
+  conf=`${SYSDEP_FILE} show "conf-ldflags"`
+  if [ $? -eq 1 ]; then SYSDEP_LDFLAGS=`${SYSDEP_LINE} 1 < ${conf}`; fi
+  export SYSDEP_CFLAGS
+  export SYSDEP_LDFLAGS
 fi
 
 #
@@ -263,7 +306,7 @@ fi
 # standard include path
 SYSDEP_STDINC="/usr/include /usr/local/include"
 case ${SYSDEP_OS} in
-  SYSDEP_OS_DARWIN) SYSDEP_STDINC="/opt/include /sw/include ${SYSDEP_STDINC}";;
+  SYSDEP_OS_DARWIN) SYSDEP_STDINC="/opt/local/include /opt/include /sw/include ${SYSDEP_STDINC}";;
   SYSDEP_OS_SUNOS) SYSDEP_STDINC="/opt/csw/include /usr/sfw/include ${SYSDEP_STDINC}";;
   *)
 esac
@@ -273,7 +316,7 @@ export SYSDEP_STDINC
 # standard library path
 SYSDEP_STDLIB="/usr/lib /usr/local/lib"
 case ${SYSDEP_OS} in
-  SYSDEP_OS_DARWIN) SYSDEP_STDLIB="/opt/lib /sw/lib ${SYSDEP_STDLIB}";;
+  SYSDEP_OS_DARWIN) SYSDEP_STDLIB="/opt/local/lib /opt/lib /sw/lib ${SYSDEP_STDLIB}";;
   SYSDEP_OS_SUNOS) SYSDEP_STDLIB="/opt/csw/lib /usr/sfw/lib ${SYSDEP_STDLIB}";;
   *)
 esac

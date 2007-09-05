@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for mod in `ls modules | sort`
+for mod in `ls modules`
 do
   if [ -f modules/$mod/defines ]
   then
@@ -8,5 +8,9 @@ do
     do
       echo $def
     done
+    if [ -d modules/$mod/os_ext ]
+    then
+      cat modules/$mod/os_ext/*/defines 2>/dev/null
+    fi
   fi
 done
