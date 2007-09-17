@@ -69,7 +69,7 @@ static const struct cachedesc intel_l1i_caches[] = {
   { 0x15, 16, 32 },
   { 0x30, 32, 64 },
   { 0x77, 16, 64 },
-  { 0, 0 },
+  { 0, 0, 0 },
 };
 static const struct cachedesc intel_l1d_caches[] = {
   { 0xa, 8, 32 },
@@ -80,7 +80,7 @@ static const struct cachedesc intel_l1d_caches[] = {
   { 0x66, 8, 64 },
   { 0x67, 16, 64 },
   { 0x68, 32, 64 },
-  { 0, 0 },
+  { 0, 0, 0 },
 };
 static const struct cachedesc intel_l2_caches[] = {
   { 0x39, 128, 64 },
@@ -105,14 +105,14 @@ static const struct cachedesc intel_l2_caches[] = {
   { 0x85, 2048, 32 },
   { 0x86, 512, 64 },
   { 0x87, 1024, 64 },
-  { 0, 0 },
+  { 0, 0, 0 },
 };
 static const struct cachedesc intel_l3_caches[] = {
   { 0x22, 512, 64 },
   { 0x23, 1024, 64 },
   { 0x25, 2048, 64 },
   { 0x29, 4096, 64 },
-  { 0, 0 },
+  { 0, 0, 0 },
 };
 static const struct vendordesc vendors[] = {
   { 0x756e6547, CPU_VENDOR_INTEL, "intel" },
