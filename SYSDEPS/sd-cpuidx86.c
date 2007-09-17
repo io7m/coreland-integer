@@ -57,8 +57,6 @@ struct vendordesc {
   const char *name;
 };
 
-static unsigned long regs1[4];
-static unsigned long regs2[4];
 static struct cpu_info cpu;
 static unsigned long eax;
 static unsigned long ebx;
@@ -197,7 +195,6 @@ static void cachesize(const struct cachedesc *ctab, unsigned long cpunum,
   unsigned int ind;
   unsigned int max;
   unsigned int jnd;
-  unsigned int knd;
   unsigned char ch;
 
   if (ctab) {
@@ -270,12 +267,7 @@ static void vendor_amd()
 int main(int argc, char *argv[])
 {
   char *arg;
-  unsigned char *ptr;
-  unsigned long tmp;
   unsigned int ind;
-  unsigned int jnd;
-  unsigned int knd;
-  unsigned int max;
 
   if (argc < 2) return 111;
   if (!cpuid_sup()) return 112;
