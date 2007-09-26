@@ -245,6 +245,13 @@ int main(void)
   dec_decode_tri(__POCC__);
 #endif
 
+  /* PCC (Portable C compiler from 4.3BSD) */
+#if defined(__PCC__)
+  ver_major = __PCC__;
+  ver_minor = __PCC_MINOR__;
+  ver_patch = __PCC_MINORMINOR__;
+#endif
+
   /* Small Device C Compiler */
 #if defined(SDCC)
   dec_decode_tri(SDCC);
