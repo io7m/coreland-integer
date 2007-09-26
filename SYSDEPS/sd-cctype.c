@@ -1,15 +1,18 @@
 #include <stdio.h>
 
-const char *var = "UNKNOWN";
+const char *var;
 
 int main()
 {
-
+  var = "UNKNOWN";
+#if defined(__BORLANDC__)
+  var = "BORLAND_CXX";
+#endif
 #if defined(__TURBOC__)
   var = "BORLAND_TURBO_C";
 #endif
-#if defined(__BORLANDC__)
-  var = "BORLAND_CXX";
+#if defined(__MWERKS__)
+  var = "CODEWARRIOR";
 #endif
 #if defined(__COMO__)
   var = "COMEAU_CXX";
@@ -41,17 +44,17 @@ int main()
 #if defined(__ghs__)
   var = "GREENHILL";
 #endif
-#if defined(__HP_cc)
-  var = "HP_C";
-#endif
 #if defined(__HP_aCC)
   var = "HP_ACC";
 #endif
-#if defined(__xlC__) || defined(__IBMC__) || defined(__IBMCPP__)
-  var = "IBM_XL";
+#if defined(__HP_cc)
+  var = "HP_C";
 #endif
 #if defined(__IAR_SYSTEMS_ICC__)
   var = "IAR";
+#endif
+#if defined(__xlC__) || defined(__IBMC__) || defined(__IBMCPP__)
+  var = "IBM_XL";
 #endif
 #if defined(__INTEL_COMPILER) || defined(__ICC) || defined(__ECC) || defined(__ICL)
   var = "INTEL";
@@ -59,14 +62,14 @@ int main()
 #if defined(__KCC)
   var = "KAI";
 #endif
-#if defined(__CA__) || defined(__KEIL__)
-  var = "KEIL_CARM";
-#endif
 #if defined(__C166__)
   var = "KEIL_C166";
 #endif
 #if defined(__C51__) || defined(__CX51__)
   var = "KEIL_C51";
+#endif
+#if defined(__CA__) || defined(__KEIL__)
+  var = "KEIL_CARM";
 #endif
 #if defined(__LCC__)
   var = "LCC";
@@ -77,8 +80,8 @@ int main()
 #if defined(__HIGHC__)
   var = "METAWARE";
 #endif
-#if defined(__MWERKS__)
-  var = "CODEWARRIOR";
+#if defined(_MRI)
+  var = "MICROTEC";
 #endif
 #if defined(__MINGW32__)
   var = "MINGW32";
@@ -89,12 +92,6 @@ int main()
 #if defined(__MRC__) || defined(MPW_C) || defined(MPW_CPLUS)
   var = "MPW";
 #endif
-#if defined(_MSC_VER)
-  var = "VISUAL_CXX";
-#endif
-#if defined(_MRI)
-  var = "MICROTEC";
-#endif
 #if defined(__CC_NORCROFT)
   var = "NORCROFT";
 #endif
@@ -103,6 +100,9 @@ int main()
 #endif
 #if defined(_PACC_VER)
   var = "PALM";
+#endif
+#if defined(__PCC__)
+  var = "PCC";
 #endif
 #if defined(__POCC__)
   var = "PELLES";
@@ -143,10 +143,12 @@ int main()
 #if defined(__USLC__)
   var = "USL_C";
 #endif
+#if defined(_MSC_VER)
+  var = "VISUAL_CXX";
+#endif
 #if defined(__WATCOMC__)
   var = "WATCOM";
 #endif
-
   printf("SYSDEP_CCTYPE_%s\n", var);
   return 0;
 }
