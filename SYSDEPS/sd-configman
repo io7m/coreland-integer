@@ -3,6 +3,7 @@
 if [ $# -lt 3 ]
 then
   echo 'usage: file path prefix'
+  exit 111
 fi
 
 file="$1"

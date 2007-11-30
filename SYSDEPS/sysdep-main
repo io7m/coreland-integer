@@ -238,6 +238,10 @@ then
     fi
   fi
 
+  #
+  # dynamic lib search
+  #
+
   if [ -f dynlib ]
   then
     lib="`${SYSDEP_LINE} 1 < dynlib`"
@@ -257,6 +261,10 @@ then
     fi
   fi
 
+  #
+  # static lib search
+  #
+
   if [ -f slib ]
   then
     lib="`${SYSDEP_LINE} 1 < slib`"
@@ -265,10 +273,10 @@ then
       lib="`${SYSDEP_LINE} 1 < os_ext/$os_lower/slib`"
     fi
     file="lib${lib}.a"
-    flags=`${SYSDEP_TRY_MANUAL} "${file}" "${SYSDEP_STDLIB}" "-L" 2>&-`
+    flags=`${SYSDEP_TRY_MANUAL} "${file}" "${SYSDEP_STDLIB}" "" 2>&-`
     if [ ! -z "${flags}" ]
     then
-      str="${flags} -l${lib} ${xflags}"
+      str=`printf "%s/%s %s" ${flags} "${file}" "${xflags}"`
       echo "${str}" >> "${ofile}"
       echo "${SYSDEP_MODULE}: ${str}" >> "sysdeps.out"
       files_move
