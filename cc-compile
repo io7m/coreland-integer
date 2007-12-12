@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id: cc-compile 2909 2007-12-12 21:21:47Z m0 $
 
 if [ $# -lt 1 ]
 then
@@ -89,5 +90,23 @@ then
     CFLAGS="${CFLAGS} ${FLAGS}"
   done
 fi
+
+#
+# compensate for any compiler bugs
+#
+
+case ${SYSTYPE} in
+  DARWIN)
+    case ${CCTYPE} in
+      GCC)
+        CFLAGS="${CFLAGS} -fno-common"  # darwin linker bug workaround
+        ;;
+      *)
+        ;;
+    esac
+    ;;
+  *)
+    ;;
+esac
 
 exec ${CC} -o ${out}.o -c ${src} ${1+"$@"} ${CFLAGS}
