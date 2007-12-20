@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id: mk-sosuffix 2909 2007-12-12 21:21:47Z m0 $
 
 SYS_TYPE=`head -n 1 conf-systype`
 if [ $? -ne 0 ]
@@ -8,11 +9,11 @@ then
 fi
 
 case "${SYS_TYPE}" in
-  darwin)
+  DARWIN)
     exec echo 'dylib';;
-  hp-ux)
+  HPUX)
     exec echo 'sl';;
-  cygwin*)
+  MS_WINDOWS)
     exec echo 'dll';;
   *)
     exec echo 'so';;
