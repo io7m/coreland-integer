@@ -1,3 +1,5 @@
+-O2 -g -W -Werror -Wall -Wno-unused-parameter
+
 -O2 -g -W -Werror -Wall -pedantic-errors -std=c99 -Wno-unused-parameter
 
 The first line of this file is passed to the C compiler.
