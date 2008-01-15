@@ -1,4 +1,4 @@
-/* $Rev: 1799 $ */
+/* $Rev: 2949 $ */
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -74,6 +74,8 @@ int check()
 {
   struct stat sb;
   int fd;
+  unsigned int got_mode;
+  unsigned int want_mode;
 
   if (!str_nsame(type, "symlink", strlen("symlink"))) {
     fd = open(file, O_RDONLY);
@@ -83,9 +85,12 @@ int check()
 
   if (!check_type(sb.st_mode)) return 1;
 
+  want_mode = perm;
+  got_mode = (unsigned int) sb.st_mode & 07777;
+
   if (!S_ISLNK(sb.st_mode)) {
-    if ((sb.st_mode & 07777) != (int) perm) {
-      printf("failed: mode %o not %o\n", (sb.st_mode & 07777), perm);
+    if (got_mode != want_mode) {
+      printf("failed: mode %o not %o\n", got_mode, want_mode);
       return 1;
     }
     if (uid >= 0) {
