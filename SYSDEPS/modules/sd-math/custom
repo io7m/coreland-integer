@@ -41,6 +41,8 @@ try_math_funcs()
   echo "#define _SD_MATH_H" >> "${head_out}"
   echo >> "${head_out}"
 
+  if [ ! -d tmp ]; then mkdir tmp; fi
+
   for fn in `ls math_funcs`
   do
     FUNC=`echo ${fn} | tr [a-z] [A-Z]`
