@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: mk-systype 2909 2007-12-12 21:21:47Z m0 $
+# $Id$
 
 cleanup()
 {

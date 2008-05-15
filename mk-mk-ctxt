@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: mk-mk-ctxt 2909 2007-12-12 21:21:47Z m0 $
+# $Id$
 
 CC=`head -n 1 conf-cc`
 if [ $? -ne 0 ]

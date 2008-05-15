@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id: mk-cctype 2909 2007-12-12 21:21:47Z m0 $
 
 cleanup()
 {
