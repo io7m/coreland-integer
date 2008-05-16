@@ -140,11 +140,11 @@ cc-slib:\
 conf-systype
 
 conf-cctype:\
-conf-cc conf-cc mk-cctype
+conf-cc mk-cctype
 	./mk-cctype > conf-cctype.tmp && mv conf-cctype.tmp conf-cctype
 
 conf-ldtype:\
-conf-ld conf-ld mk-ldtype
+conf-ld mk-ldtype
 	./mk-ldtype > conf-ldtype.tmp && mv conf-ldtype.tmp conf-ldtype
 
 conf-sosuffix:\
@@ -373,7 +373,7 @@ cc-compile insthier.c install.h ctxt.h
 
 int16.a:\
 cc-slib int16.sld int16_pack.o int16_unpack.o
-	./cc-slib int16
+	./cc-slib int16 int16_pack.o int16_unpack.o
 
 int16.h:\
 _int16.h
@@ -388,7 +388,7 @@ cc-compile int16_unpack.c int16.h
 
 int32.a:\
 cc-slib int32.sld int32_pack.o int32_unpack.o
-	./cc-slib int32
+	./cc-slib int32 int32_pack.o int32_unpack.o
 
 int32.h:\
 _int32.h
@@ -403,7 +403,7 @@ cc-compile int32_unpack.c int32.h
 
 int64.a:\
 cc-slib int64.sld int64_pack.o int64_unpack.o
-	./cc-slib int64
+	./cc-slib int64 int64_pack.o int64_unpack.o
 
 int64.h:\
 _int64.h
