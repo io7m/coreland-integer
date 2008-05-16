@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: mk-sosuffix 2909 2007-12-12 21:21:47Z m0 $
+# $Id$
 
 SYS_TYPE=`head -n 1 conf-systype`
 if [ $? -ne 0 ]
