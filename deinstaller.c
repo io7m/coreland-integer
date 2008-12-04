@@ -4,7 +4,7 @@
 
 #include "install.h"
 
-const char progname[] = "installer";
+const char progname[] = "deinstaller";
 
 void
 cb_info (const char *str, void *data)
@@ -38,8 +38,8 @@ main (int argc, char *argv[])
   install_callback_info_set (cb_info);
 
   flag = (argc > 1) ? INSTALL_DRYRUN : 0;
-  for (i = 0; i < insthier_len; ++i) {
-    status = install (&insthier[i], flag);
+  for (i = insthier_len - 1;; --i) {
+    status = deinstall (&insthier[i], flag);
     switch (status.status) {
       case INSTALL_STATUS_OK:
         break;
@@ -53,6 +53,7 @@ main (int argc, char *argv[])
         exit (112);
         break;
     }
+    if (i == 0) break;
   }
 
   return 0;

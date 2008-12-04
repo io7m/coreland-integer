@@ -1,4 +1,4 @@
-installer.o
+deinstaller.o
 insthier.o
 install.a
 ctxt/ctxt.a

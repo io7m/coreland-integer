@@ -1,4 +1,4 @@
-/* $Rev: 1800 $ */
+/* $Rev$ */
 
 #include <errno.h>
 #include "install.h"

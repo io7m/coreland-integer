@@ -1,7 +1,5 @@
-#include "install.h"
 #include "ctxt.h"
-
-/* generate AFTER build, or generated headers will be missing! */
+#include "install.h"
 
 struct install_item insthier[] = {
   {INST_MKDIR, 0, 0, ctxt_bindir, 0, 0, 0755},
@@ -36,12 +34,15 @@ struct install_item insthier[] = {
   {INST_COPY, "scan_u64.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "scan_u64o.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "scan_u64x.c", 0, ctxt_repos, 0, 0, 0644},
+  {INST_COPY, "sysinfo.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint16_pack.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint16_unpack.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint32_pack.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint32_unpack.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint64_pack.c", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint64_unpack.c", 0, ctxt_repos, 0, 0, 0644},
+  {INST_COPY, "_byteorder.h", 0, ctxt_repos, 0, 0, 0644},
+  {INST_COPY, "_byteorder.h", 0, ctxt_incdir, 0, 0, 0644},
   {INST_COPY, "_float32.h", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "_float32.h", 0, ctxt_incdir, 0, 0, 0644},
   {INST_COPY, "_float64.h", 0, ctxt_repos, 0, 0, 0644},
@@ -105,6 +106,8 @@ struct install_item insthier[] = {
   {INST_COPY, "uint64.sld", 0, ctxt_repos, 0, 0, 0644},
   {INST_COPY, "uint64.a", "libuint64.a", ctxt_slibdir, 0, 0, 0644},
   {INST_COPY, "integer-conf.ld", 0, ctxt_repos, 0, 0, 0644},
-  {INST_COPY, "integer-conf", 0, ctxt_bindir, 0, 0, 0755},
+  {INST_COPY_EXEC, "integer-conf", 0, ctxt_bindir, 0, 0, 0755},
+  {INST_COPY, "sysinfo.ld", 0, ctxt_repos, 0, 0, 0644},
+  {INST_COPY_EXEC, "sysinfo", 0, ctxt_bindir, 0, 0, 0755},
 };
 unsigned long insthier_len = sizeof(insthier) / sizeof(struct install_item);
