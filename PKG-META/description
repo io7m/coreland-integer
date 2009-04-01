@@ -1,0 +1,2 @@
+This library provides portable specific-sized integer
+packing, unpacking, formatting and scanning functions.
