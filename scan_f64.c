@@ -28,10 +28,8 @@ unsigned int scan_float64(const char *str, float64 *f)
     switch (ch) {
       case 0:
         goto END;
-        break;
       case '.':
         goto DECIMAL_POINT;
-        break;
       case '0':
       case '1':
       case '2':

@@ -4,3 +4,4 @@
 20080115 code: updated inst-check.c
 20081204 code: updated installer.
 20090226 code: updated installer.
+20090403 code: remove unreachable statements for Sun C strict semantic checks.

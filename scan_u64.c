@@ -27,7 +27,6 @@ unsigned int scan_u64(const char *str, uint64 *ul)
         break;
       default:
         goto END;
-        break;
     }
   }
 
